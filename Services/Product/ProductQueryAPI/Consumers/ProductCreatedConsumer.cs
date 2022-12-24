@@ -1,5 +1,6 @@
 using Confluent.Kafka;
 using Confluent.Kafka.SyncOverAsync;
+using ProductQueryAPI.Handlers;
 using ProductQueryAPI.Models;
 using ProductQueryAPI.Utils;
 
@@ -9,6 +10,7 @@ public class ProductCreatedConsumer : BackgroundService
 {
     private readonly string _topic;
     private readonly IConsumer<Ignore, Product> _consumer;
+    private readonly InsertProduct _insertProduct;
 
     public ProductCreatedConsumer(IConfiguration configuration)
     {
@@ -18,6 +20,7 @@ public class ProductCreatedConsumer : BackgroundService
         this._consumer = new ConsumerBuilder<Ignore, Product>(consumerConfig)
             .SetValueDeserializer(new ProductDeserializer<Product>().AsSyncOverAsync())
             .Build();
+        this._insertProduct = new InsertProduct();
     }
     
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -33,9 +36,10 @@ public class ProductCreatedConsumer : BackgroundService
         {
             try
             {
-                // var consumer = this._consumer.Consume(cancellationToken);
+                var payload = this._consumer.Consume(cancellationToken);
 
                 // Handle message...
+                this._insertProduct.ShowMessage(payload.Message.Value.Id.ToString());
             }
             catch (OperationCanceledException)
             {
