@@ -12,4 +12,5 @@ public class DataContext : DbContext
     }
 
     public DbSet<Product> Products => Set<Product>();
+    public DbSet<Order> Orders => Set<Order>();
 }

@@ -5,12 +5,12 @@ using OrderQueryAPI.Schemas;
 
 namespace OrderQueryAPI.Consumers;
 
-public class OrderCreatedConsumer : BackgroundService
+public class OrderTopicConsumer : BackgroundService
 {
     private readonly string _topic;
     private readonly IConsumer<Ignore, OrderRequest> _consumer;
 
-    public OrderCreatedConsumer(IConfiguration configuration)
+    public OrderTopicConsumer(IConfiguration configuration)
     {
         var consumerConfig = new ConsumerConfig();
         configuration.GetSection("Kafka:ConsumerSettings").Bind(consumerConfig);
