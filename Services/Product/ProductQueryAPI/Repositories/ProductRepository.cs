@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using ProductQueryAPI.Data;
 using ProductQueryAPI.Models;
 
@@ -16,5 +17,17 @@ public class ProductRepository : IProductRepository
     {
         this._context.Products.Add(data);
         this._context.SaveChanges();
+    }
+
+    public Product GetById(Guid id)
+    {
+        return this._context.Products
+            .AsNoTracking()
+            .SingleOrDefault(p => p.Id == id) ?? throw new InvalidOperationException();
+    }
+
+    public IEnumerable<Product> GetAll()
+    {
+        return this._context.Products.AsNoTracking().ToList();
     }
 }
