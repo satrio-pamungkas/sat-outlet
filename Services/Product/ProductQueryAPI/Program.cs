@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using ProductQueryAPI.Consumers;
 using ProductQueryAPI.Data;
+using ProductQueryAPI.Handlers;
+using ProductQueryAPI.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 var dbString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -13,6 +15,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(options => options.UseNpgsql(dbString));
 builder.Services.AddHostedService<ProductCreatedConsumer>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IInsertProduct, InsertProduct>();
 
 var app = builder.Build();
 

@@ -10,9 +10,9 @@ public class ProductCreatedConsumer : BackgroundService
 {
     private readonly string _topic;
     private readonly IConsumer<Ignore, Product> _consumer;
-    private readonly InsertProduct _insertProduct;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
 
-    public ProductCreatedConsumer(IConfiguration configuration)
+    public ProductCreatedConsumer(IConfiguration configuration, IServiceScopeFactory serviceScopeFactory)
     {
         var consumerConfig = new ConsumerConfig();
         configuration.GetSection("Kafka:ConsumerSettings").Bind(consumerConfig);
@@ -20,9 +20,9 @@ public class ProductCreatedConsumer : BackgroundService
         this._consumer = new ConsumerBuilder<Ignore, Product>(consumerConfig)
             .SetValueDeserializer(new ProductDeserializer<Product>().AsSyncOverAsync())
             .Build();
-        this._insertProduct = new InsertProduct();
+        this._serviceScopeFactory = serviceScopeFactory;
     }
-    
+
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
         return Task.Run(() => StartConsumerLoop(stoppingToken), stoppingToken);
@@ -36,10 +36,13 @@ public class ProductCreatedConsumer : BackgroundService
         {
             try
             {
+                using var scope = _serviceScopeFactory.CreateScope();
+                var insertProduct = scope.ServiceProvider.GetRequiredService<IInsertProduct>();
                 var payload = this._consumer.Consume(cancellationToken);
+                var data = payload.Message.Value;
 
                 // Handle message...
-                this._insertProduct.ShowMessage(payload.Message.Value.Id.ToString());
+                insertProduct?.CreateProduct(data);
             }
             catch (OperationCanceledException)
             {

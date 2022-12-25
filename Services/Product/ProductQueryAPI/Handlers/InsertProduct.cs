@@ -1,9 +1,18 @@
+using ProductQueryAPI.Repositories;
+using ProductQueryAPI.Models;
+
 namespace ProductQueryAPI.Handlers;
 
-public class InsertProduct
+public class InsertProduct : IInsertProduct
 {
-    public void ShowMessage(string id)
+    private readonly IProductRepository _productRepository;
+
+    public InsertProduct(IProductRepository productRepository)
     {
-        Console.WriteLine($"Product ID is {id}");
+        this._productRepository = productRepository;
+    }
+    public void CreateProduct(Product data)
+    {
+        this._productRepository.Create(data);
     }
 }
