@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductQueryAPI", "Services
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderCommandAPI", "Services\Order\OrderCommandAPI\OrderCommandAPI.csproj", "{258583D1-0AE4-4188-95F7-D2195863FB5A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderQueryAPI", "Services\Order\OrderQueryAPI\OrderQueryAPI.csproj", "{D5A102B1-8ACA-4568-9C85-6B0F8C7E5DBE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{258583D1-0AE4-4188-95F7-D2195863FB5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{258583D1-0AE4-4188-95F7-D2195863FB5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{258583D1-0AE4-4188-95F7-D2195863FB5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5A102B1-8ACA-4568-9C85-6B0F8C7E5DBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5A102B1-8ACA-4568-9C85-6B0F8C7E5DBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5A102B1-8ACA-4568-9C85-6B0F8C7E5DBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5A102B1-8ACA-4568-9C85-6B0F8C7E5DBE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
