@@ -12,7 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(options => options.UseNpgsql(dbString));
-builder.Services.AddHostedService<OrderCreatedConsumer>();
+builder.Services.AddHostedService<OrderTopicConsumer>();
 
 var app = builder.Build();
 

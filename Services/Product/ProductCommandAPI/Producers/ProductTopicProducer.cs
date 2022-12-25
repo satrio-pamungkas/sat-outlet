@@ -4,11 +4,11 @@ using ProductCommandAPI.Utils;
 
 namespace ProductCommandAPI.Producers;
 
-public class ProductCreatedProducer
+public class ProductTopicProducer
 {
     private readonly IProducer<Null, Product> _producer;
     
-    public ProductCreatedProducer(IConfiguration configuration)
+    public ProductTopicProducer(IConfiguration configuration)
     {
         var producerConfig = new ProducerConfig();
         configuration.GetSection("Kafka:ProducerSettings").Bind(producerConfig);

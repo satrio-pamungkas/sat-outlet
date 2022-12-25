@@ -14,7 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(options => options.UseNpgsql(dbString));
-builder.Services.AddHostedService<ProductCreatedConsumer>();
+builder.Services.AddHostedService<ProductTopicConsumer>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IInsertProduct, InsertProduct>();
 

@@ -6,17 +6,17 @@ using ProductQueryAPI.Utils;
 
 namespace ProductQueryAPI.Consumers;
 
-public class ProductCreatedConsumer : BackgroundService
+public class ProductTopicConsumer : BackgroundService
 {
     private readonly string _topic;
     private readonly IConsumer<Ignore, Product> _consumer;
     private readonly IServiceScopeFactory _serviceScopeFactory;
 
-    public ProductCreatedConsumer(IConfiguration configuration, IServiceScopeFactory serviceScopeFactory)
+    public ProductTopicConsumer(IConfiguration configuration, IServiceScopeFactory serviceScopeFactory)
     {
         var consumerConfig = new ConsumerConfig();
         configuration.GetSection("Kafka:ConsumerSettings").Bind(consumerConfig);
-        this._topic = configuration.GetValue<string>("Kafka:Topic");
+        this._topic = configuration.GetValue<string>("Kafka:Topic:Product");
         this._consumer = new ConsumerBuilder<Ignore, Product>(consumerConfig)
             .SetValueDeserializer(new ProductDeserializer<Product>().AsSyncOverAsync())
             .Build();

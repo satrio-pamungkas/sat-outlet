@@ -14,7 +14,7 @@ public class OrderTopicConsumer : BackgroundService
     {
         var consumerConfig = new ConsumerConfig();
         configuration.GetSection("Kafka:ConsumerSettings").Bind(consumerConfig);
-        this._topic = configuration.GetValue<string>("Kafka:Topic");
+        this._topic = configuration.GetValue<string>("Kafka:Topic:Order");
         this._consumer = new ConsumerBuilder<Ignore, OrderRequest>(consumerConfig)
             .SetValueDeserializer(new ProductDeserializer<OrderRequest>().AsSyncOverAsync())
             .Build();

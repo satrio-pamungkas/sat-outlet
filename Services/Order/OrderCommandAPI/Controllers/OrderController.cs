@@ -8,19 +8,19 @@ namespace OrderCommandAPI.Controllers;
 [Route("[controller]")]
 public class OrderController : ControllerBase
 {
-    private readonly OrderCreatedProducer _orderCreatedProducer;
+    private readonly OrderTopicProducer _orderTopicProducer;
     private readonly string _topic;
 
     public OrderController(IConfiguration configuration)
     {
-        this._orderCreatedProducer = new OrderCreatedProducer(configuration);
-        this._topic = configuration.GetValue<string>("Kafka:Topic");
+        this._orderTopicProducer = new OrderTopicProducer(configuration);
+        this._topic = configuration.GetValue<string>("Kafka:Topic:Order");
     }
     
     [HttpPost]
     public ActionResult<OrderRequest> CreateOrder(OrderRequest request)
     {
-        this._orderCreatedProducer.EmitMessage(this._topic, request);
+        this._orderTopicProducer.EmitMessage(this._topic, request);
         return request;
     }
 }

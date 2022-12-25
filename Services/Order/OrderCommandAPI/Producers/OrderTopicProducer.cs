@@ -4,11 +4,11 @@ using OrderCommandAPI.Utils;
 
 namespace OrderCommandAPI.Producers;
 
-public class OrderCreatedProducer
+public class OrderTopicProducer
 {
     private readonly IProducer<Null, OrderRequest> _producer;
     
-    public OrderCreatedProducer(IConfiguration configuration)
+    public OrderTopicProducer(IConfiguration configuration)
     {
         var producerConfig = new ProducerConfig();
         configuration.GetSection("Kafka:ProducerSettings").Bind(producerConfig);
