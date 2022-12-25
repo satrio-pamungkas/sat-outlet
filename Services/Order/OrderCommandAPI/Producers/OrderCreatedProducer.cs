@@ -19,8 +19,11 @@ public class OrderCreatedProducer
     
     public void EmitMessage(string topic, OrderRequest payload)
     {
+        var headers = new Headers();
+        headers.Add("OrderCreated", new byte[] { 100 });
         this._producer.ProduceAsync(topic, new Message<Null, OrderRequest>
         {
+            Headers = headers,
             Value = payload
         });
     }
