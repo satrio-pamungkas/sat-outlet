@@ -1,26 +1,23 @@
 using Confluent.Kafka;
 using Confluent.Kafka.SyncOverAsync;
-using ProductQueryAPI.Handlers;
-using ProductQueryAPI.Models;
-using ProductQueryAPI.Utils;
+using OrderQueryAPI.Utils;
+using OrderQueryAPI.Schemas;
 
-namespace ProductQueryAPI.Consumers;
+namespace OrderQueryAPI.Consumers;
 
-public class ProductCreatedConsumer : BackgroundService
+public class OrderTopicConsumer : BackgroundService
 {
     private readonly string _topic;
-    private readonly IConsumer<Ignore, Product> _consumer;
-    private readonly IServiceScopeFactory _serviceScopeFactory;
+    private readonly IConsumer<Ignore, OrderRequest> _consumer;
 
-    public ProductCreatedConsumer(IConfiguration configuration, IServiceScopeFactory serviceScopeFactory)
+    public OrderTopicConsumer(IConfiguration configuration)
     {
         var consumerConfig = new ConsumerConfig();
         configuration.GetSection("Kafka:ConsumerSettings").Bind(consumerConfig);
-        this._topic = configuration.GetValue<string>("Kafka:Topic");
-        this._consumer = new ConsumerBuilder<Ignore, Product>(consumerConfig)
-            .SetValueDeserializer(new ProductDeserializer<Product>().AsSyncOverAsync())
+        this._topic = configuration.GetValue<string>("Kafka:Topic:Order");
+        this._consumer = new ConsumerBuilder<Ignore, OrderRequest>(consumerConfig)
+            .SetValueDeserializer(new ProductDeserializer<OrderRequest>().AsSyncOverAsync())
             .Build();
-        this._serviceScopeFactory = serviceScopeFactory;
     }
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -36,13 +33,15 @@ public class ProductCreatedConsumer : BackgroundService
         {
             try
             {
-                using var scope = _serviceScopeFactory.CreateScope();
-                var insertProduct = scope.ServiceProvider.GetRequiredService<IInsertProduct>();
+                // using var scope = _serviceScopeFactory.CreateScope();
+                // var insertProduct = scope.ServiceProvider.GetRequiredService<IInsertProduct>();
                 var payload = this._consumer.Consume(cancellationToken);
-                var data = payload.Message.Value;
+                var header = payload.Message.Headers[0].Key;
+                var data = payload.Message.Value.Quantity;
 
                 // Handle message...
-                insertProduct?.CreateProduct(data);
+                Console.WriteLine(header);
+                Console.WriteLine(data);
             }
             catch (OperationCanceledException)
             {
